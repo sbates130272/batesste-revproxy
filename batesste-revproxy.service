@@ -1,0 +1,21 @@
+[Unit]
+Description=batesste-revproxy reverse proxy service
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+
+WorkingDirectory=/opt/batesste-revproxy
+
+# Remove old containers, images and volumes
+ExecStartPre=docker-compose -f batesste-revproxy-compose.yml down
+
+# Compose up
+ExecStart=docker-compose -f batesste-revproxy-compose.yml up --build
+
+# Compose down, remove containers and volumes
+ExecStop=docker-compose -f batesste-revproxy-compose.yml down -v
+
+[Install]
+WantedBy=multi-user.target
